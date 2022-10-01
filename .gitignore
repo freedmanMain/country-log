@@ -1,4 +1,10 @@
 /.idea/
 /target/
-/usecases/target/
 *.iml
+
+/usecases/target/
+
+/rest/target/
+/rest/HELP.md
+/rest/mvnw*
+/rest/.mvn
