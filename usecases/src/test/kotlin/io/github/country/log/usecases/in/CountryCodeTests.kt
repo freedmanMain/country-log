@@ -6,7 +6,6 @@ import io.github.country.log.usecases.fixtures.CountryCodeAlreadyExistsFake
 import io.github.country.log.usecases.service.CountryCodeAlreadyExists
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.booleans.shouldBeTrue
-import io.kotest.matchers.shouldBe
 
 class CountryCodeTests : BehaviorSpec({
     given("I have some value that may be a country code") {
@@ -33,11 +32,7 @@ class CountryCodeTests : BehaviorSpec({
 
                 result as Either.Left
 
-                val errors = result.value
-
-                errors.size shouldBe (1)
-
-                val error = errors.first()
+                val error = result.value
 
                 (error is CountryCodeErrors.EmptyCountryCode).shouldBeTrue()
             }
@@ -55,11 +50,7 @@ class CountryCodeTests : BehaviorSpec({
 
                 result as Either.Left
 
-                val errors = result.value
-
-                errors.size shouldBe (1)
-
-                val error = errors.first()
+                val error = result.value
 
                 (error is CountryCodeErrors.CountryCodeNotExists).shouldBeTrue()
             }
