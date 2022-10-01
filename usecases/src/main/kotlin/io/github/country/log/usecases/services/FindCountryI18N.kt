@@ -1,4 +1,4 @@
-package io.github.country.log.usecases.service
+package io.github.country.log.usecases.services
 
 import arrow.core.Option
 import com.sun.imageio.plugins.common.I18N

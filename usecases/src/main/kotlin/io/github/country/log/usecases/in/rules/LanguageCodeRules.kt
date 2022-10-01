@@ -16,7 +16,7 @@ import arrow.typeclasses.Semigroup
 import io.github.country.log.usecases.`in`.LanguageCode
 import io.github.country.log.usecases.`in`.LanguageCodeInput
 import io.github.country.log.usecases.common.UseCaseError
-import io.github.country.log.usecases.service.LanguageCodeAlreadyExists
+import io.github.country.log.usecases.services.LanguageCodeAlreadyExists
 
 sealed class LanguageCodeErrors : UseCaseError {
     object EmptyLanguageCode : LanguageCodeErrors()

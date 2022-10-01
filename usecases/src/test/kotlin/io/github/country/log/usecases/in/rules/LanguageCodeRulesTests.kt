@@ -3,7 +3,7 @@ package io.github.country.log.usecases.`in`.rules
 import arrow.core.Either
 import io.github.country.log.usecases.`in`.LanguageCodeInput
 import io.github.country.log.usecases.fixtures.LanguageCodeAlreadyExistsFake
-import io.github.country.log.usecases.service.LanguageCodeAlreadyExists
+import io.github.country.log.usecases.services.LanguageCodeAlreadyExists
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe

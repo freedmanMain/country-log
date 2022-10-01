@@ -3,7 +3,7 @@ package io.github.country.log.usecases.`in`
 import arrow.core.Either
 import io.github.country.log.usecases.`in`.rules.CountryCodeErrors
 import io.github.country.log.usecases.fixtures.CountryCodeAlreadyExistsFake
-import io.github.country.log.usecases.service.CountryCodeAlreadyExists
+import io.github.country.log.usecases.services.CountryCodeAlreadyExists
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 
@@ -11,7 +11,7 @@ class CountryCodeTests : BehaviorSpec({
     given("I have some value that may be a country code") {
         `when`("I make country code with valid data") {
             then("The country code creation should be successful") {
-                val value = InputCountryField("UA")
+                val value = CountryCodeInput("UA")
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
                 val result = CountryCode.of(value = value, isExists = isExists)
@@ -22,7 +22,7 @@ class CountryCodeTests : BehaviorSpec({
 
         `when`("I make country code with blank code value") {
             then("The country code creation should be failure") {
-                val value = InputCountryField("")
+                val value = CountryCodeInput("")
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
                 val result =
@@ -40,7 +40,7 @@ class CountryCodeTests : BehaviorSpec({
 
         `when`("I make country with non existent value") {
             then("The country code creation should be failure") {
-                val value = InputCountryField("RU")
+                val value = CountryCodeInput("RU")
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
                 val result =

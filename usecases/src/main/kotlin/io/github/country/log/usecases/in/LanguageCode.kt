@@ -3,7 +3,7 @@ package io.github.country.log.usecases.`in`
 import arrow.core.Either
 import io.github.country.log.usecases.`in`.rules.LanguageCodeErrors
 import io.github.country.log.usecases.`in`.rules.LanguageCodeRules
-import io.github.country.log.usecases.service.LanguageCodeAlreadyExists
+import io.github.country.log.usecases.services.LanguageCodeAlreadyExists
 
 @JvmInline
 value class LanguageCodeInput(val value: String)

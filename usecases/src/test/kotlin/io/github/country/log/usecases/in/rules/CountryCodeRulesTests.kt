@@ -1,9 +1,9 @@
 package io.github.country.log.usecases.`in`.rules
 
 import arrow.core.Either
-import io.github.country.log.usecases.`in`.InputCountryField
+import io.github.country.log.usecases.`in`.CountryCodeInput
 import io.github.country.log.usecases.fixtures.CountryCodeAlreadyExistsFake
-import io.github.country.log.usecases.service.CountryCodeAlreadyExists
+import io.github.country.log.usecases.services.CountryCodeAlreadyExists
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
@@ -12,7 +12,7 @@ class CountryCodeRulesTests : BehaviorSpec({
     given("I have some value that may be a country code") {
         `when`("I validate country code input with valid data") {
             then("Validation should be successful") {
-                val value = InputCountryField("UA")
+                val value = CountryCodeInput("UA")
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
                 val result = CountryCodeRules(isExists, value)
@@ -23,7 +23,7 @@ class CountryCodeRulesTests : BehaviorSpec({
 
         `when`("I validate country code input with blank value") {
             then("Validation should be failure") {
-                val value = InputCountryField("")
+                val value = CountryCodeInput("")
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
                 val result = CountryCodeRules(isExists, value)
@@ -40,7 +40,7 @@ class CountryCodeRulesTests : BehaviorSpec({
 
         `when`("I validate country code input with non existent value") {
             then("Validation should be failure") {
-                val value = InputCountryField("RU")
+                val value = CountryCodeInput("RU")
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
                 val result = CountryCodeRules(isExists, value)
@@ -59,7 +59,7 @@ class CountryCodeRulesTests : BehaviorSpec({
     given("I have some values that may be a country codes") {
         `when`("I validate valid country codes input using 'fastFail' strategy") {
             then("Validation should be successful") {
-                val fields = listOf(InputCountryField("UA"), InputCountryField("EN"))
+                val fields = listOf(CountryCodeInput("UA"), CountryCodeInput("EN"))
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
                 val result = CountryCodeRules(Strategy.FailFast, isExists, fields)
@@ -70,7 +70,7 @@ class CountryCodeRulesTests : BehaviorSpec({
 
         `when`("I validate country codes input with blank values using 'failFast' strategy") {
             then("Validation should be failure") {
-                val fields = listOf(InputCountryField(""), InputCountryField(""))
+                val fields = listOf(CountryCodeInput(""), CountryCodeInput(""))
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
                 val result = CountryCodeRules(Strategy.FailFast, isExists, fields)
@@ -91,7 +91,7 @@ class CountryCodeRulesTests : BehaviorSpec({
 
         `when`("I validate country codes input with non existent values using 'failFast' strategy") {
             then("Validation should be failure") {
-                val fields = listOf(InputCountryField("RU"), InputCountryField("NC"))
+                val fields = listOf(CountryCodeInput("RU"), CountryCodeInput("NC"))
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
                 val result = CountryCodeRules(Strategy.FailFast, isExists, fields)
@@ -112,7 +112,7 @@ class CountryCodeRulesTests : BehaviorSpec({
 
         `when`("I validate country codes input with blank values using 'errorAccumulation' strategy") {
             then("Validation should be failure") {
-                val fields = listOf(InputCountryField(""), InputCountryField(""))
+                val fields = listOf(CountryCodeInput(""), CountryCodeInput(""))
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
                 val result = CountryCodeRules(Strategy.ErrorAccumulation, isExists, fields)
@@ -131,7 +131,7 @@ class CountryCodeRulesTests : BehaviorSpec({
 
         `when`("I validate country codes input with non existent values using 'errorAccumulation' strategy") {
             then("Validation should be failure") {
-                val fields = listOf(InputCountryField("RU"), InputCountryField("NC"))
+                val fields = listOf(CountryCodeInput("RU"), CountryCodeInput("NC"))
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
                 val result = CountryCodeRules(Strategy.ErrorAccumulation, isExists, fields)
