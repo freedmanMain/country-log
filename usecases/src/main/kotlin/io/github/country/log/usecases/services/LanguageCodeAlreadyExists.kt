@@ -1,4 +1,4 @@
-package io.github.country.log.usecases.service
+package io.github.country.log.usecases.services
 
 import io.github.country.log.usecases.`in`.LanguageCodeInput
 

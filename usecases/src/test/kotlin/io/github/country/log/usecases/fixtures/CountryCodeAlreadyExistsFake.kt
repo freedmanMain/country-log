@@ -1,14 +1,14 @@
 package io.github.country.log.usecases.fixtures
 
-import io.github.country.log.usecases.`in`.InputCountryField
-import io.github.country.log.usecases.service.CountryCodeAlreadyExists
+import io.github.country.log.usecases.`in`.CountryCodeInput
+import io.github.country.log.usecases.services.CountryCodeAlreadyExists
 
 class CountryCodeAlreadyExistsFake : CountryCodeAlreadyExists {
-    private val inMemDb = mutableMapOf<InputCountryField, String>()
+    private val inMemDb = mutableMapOf<CountryCodeInput, String>()
         .apply {
-            this[InputCountryField("UA")] = """ { code: "UA" } """
-            this[InputCountryField("EN")] = """ { code: "EN" } """
+            this[CountryCodeInput("UA")] = """ { code: "UA" } """
+            this[CountryCodeInput("EN")] = """ { code: "EN" } """
         }
 
-    override fun check(inputCountryCode: InputCountryField): Boolean = inMemDb[inputCountryCode] != null
+    override fun check(countryCode: CountryCodeInput): Boolean = inMemDb[countryCode] != null
 }

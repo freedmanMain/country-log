@@ -1,7 +1,7 @@
 package io.github.country.log.usecases.fixtures
 
 import io.github.country.log.usecases.`in`.LanguageCodeInput
-import io.github.country.log.usecases.service.LanguageCodeAlreadyExists
+import io.github.country.log.usecases.services.LanguageCodeAlreadyExists
 
 class LanguageCodeAlreadyExistsFake : LanguageCodeAlreadyExists {
     private val inMemDb = mutableMapOf<LanguageCodeInput, String>()
