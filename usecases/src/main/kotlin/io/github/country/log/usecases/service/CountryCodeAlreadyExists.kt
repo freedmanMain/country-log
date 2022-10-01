@@ -1,7 +1,7 @@
 package io.github.country.log.usecases.service
 
-import io.github.country.log.usecases.`in`.CountryFormField
+import io.github.country.log.usecases.`in`.InputCountryField
 
 interface CountryCodeAlreadyExists {
-    fun check(countryCode: CountryFormField): Boolean
+    fun check(inputCountryCode: InputCountryField): Boolean
 }
