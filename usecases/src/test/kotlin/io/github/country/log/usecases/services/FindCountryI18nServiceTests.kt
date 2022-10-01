@@ -6,14 +6,14 @@ import io.github.country.log.usecases.fixtures.InMemCountryRepository
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 
-class FindCountryI18nUseCaseTests : BehaviorSpec({
+class FindCountryI18nServiceTests : BehaviorSpec({
     given("I want to find internalization name of country by language and code") {
         `when`("Internalization for country code and language code is exists") {
             then("I should get i18n name for country") {
                 val languageCode = LanguageCode("EN")
                 val countryCode = CountryCode("UA")
 
-                val findCountryI18N: FindCountryI18N = FindCountryI18nUseCase(InMemCountryRepository())
+                val findCountryI18N: FindCountryI18N = FindCountryI18nService(InMemCountryRepository())
 
                 findCountryI18N.find(countryCode, languageCode).isNotEmpty().shouldBeTrue()
             }
@@ -24,7 +24,7 @@ class FindCountryI18nUseCaseTests : BehaviorSpec({
                 val languageCode = LanguageCode("EN")
                 val countryCode = CountryCode("RU")
 
-                val findCountryI18N: FindCountryI18N = FindCountryI18nUseCase(InMemCountryRepository())
+                val findCountryI18N: FindCountryI18N = FindCountryI18nService(InMemCountryRepository())
 
                 findCountryI18N.find(countryCode, languageCode).isEmpty().shouldBeTrue()
             }
