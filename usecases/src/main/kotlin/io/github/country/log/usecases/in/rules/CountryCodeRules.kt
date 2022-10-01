@@ -1,4 +1,4 @@
-package io.github.country.log.usecases.`in`.validation
+package io.github.country.log.usecases.`in`.rules
 
 import arrow.core.Either
 import arrow.core.Nel
@@ -19,36 +19,34 @@ import io.github.country.log.usecases.common.UseCaseError
 import io.github.country.log.usecases.service.CountryCodeAlreadyExists
 
 sealed class CountryCodeErrors : UseCaseError {
-
     object EmptyCountryCode : CountryCodeErrors()
-
     object CountryCodeNotExists : CountryCodeErrors()
-
     object NotAnCountryCode : CountryCodeErrors()
 }
 
 internal object CountryCodeRules {
 
-    private fun InputCountryField.isNotEmptyNel(): ValidatedNel<CountryCodeErrors, InputCountryField> =
+    private fun InputCountryField.isNotEmptyNel(): ValidatedNel<CountryCodeErrors.EmptyCountryCode, InputCountryField> =
         if (this.value.isBlank())
             CountryCodeErrors.EmptyCountryCode.invalidNel()
         else
             validNel()
 
-    private fun InputCountryField.isNotEmpty(): Validated<CountryCodeErrors, InputCountryField> =
+    private fun InputCountryField.isNotEmpty(): Validated<CountryCodeErrors.EmptyCountryCode, InputCountryField> =
         if (this.value.isBlank())
             CountryCodeErrors.EmptyCountryCode.invalid()
         else
             valid()
 
-
-    private fun InputCountryField.isExistsNel(isExists: CountryCodeAlreadyExists): ValidatedNel<CountryCodeErrors, InputCountryField> =
+    private fun InputCountryField.isExistsNel(isExists: CountryCodeAlreadyExists)
+            : ValidatedNel<CountryCodeErrors.CountryCodeNotExists, InputCountryField> =
         if (!isExists.check(this))
             CountryCodeErrors.CountryCodeNotExists.invalidNel()
         else
             validNel()
 
-    private fun InputCountryField.isExists(isExists: CountryCodeAlreadyExists): Validated<CountryCodeErrors, InputCountryField> =
+    private fun InputCountryField.isExists(isExists: CountryCodeAlreadyExists)
+            : Validated<CountryCodeErrors.CountryCodeNotExists, InputCountryField> =
         if (!isExists.check(this))
             CountryCodeErrors.CountryCodeNotExists.invalid()
         else
@@ -82,12 +80,12 @@ internal object CountryCodeRules {
     ): Either<CountryCodeErrors, CountryCode> = field.validateFailFast(isExists)
 
     operator fun invoke(
-        strategy: ValidationStrategy,
+        strategy: Strategy,
         isExists: CountryCodeAlreadyExists,
         fields: List<InputCountryField>
     ): Either<Nel<CountryCodeErrors>, List<CountryCode>> = when (strategy) {
-        is ValidationStrategy.FailFast -> fields.traverse { it.validateFailFastNel(isExists) }
+        is Strategy.FailFast -> fields.traverse { it.validateFailFastNel(isExists) }
 
-        is ValidationStrategy.ErrorAccumulation -> fields.traverse { it.validateErrorAccumulate(isExists) }.toEither()
+        is Strategy.ErrorAccumulation -> fields.traverse { it.validateErrorAccumulate(isExists) }.toEither()
     }
 }
