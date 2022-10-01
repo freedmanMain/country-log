@@ -20,4 +20,3 @@ value class CountryCode internal constructor(private val value: String) {
 
     fun code(): String = value
 }
-
