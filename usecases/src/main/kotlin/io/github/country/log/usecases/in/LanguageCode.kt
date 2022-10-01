@@ -15,7 +15,7 @@ value class LanguageCode internal constructor(private val value: String) {
         fun of(
             value: LanguageCodeInput,
             isExists: LanguageCodeAlreadyExists
-        ): Either<LanguageCodeErrors, LanguageCode> = LanguageCodeRules(value, isExists)
+        ): Either<LanguageCodeErrors, LanguageCode> = LanguageCodeRules(isExists, value)
     }
 
     fun code(): String = value

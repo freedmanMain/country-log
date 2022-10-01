@@ -71,14 +71,14 @@ internal object LanguageCodeRules {
         .handleErrorWith { LanguageCodeErrors.NotAtLanguage.invalidNel() }
 
     operator fun invoke(
-        field: LanguageCodeInput,
-        isExists: LanguageCodeAlreadyExists
+        isExists: LanguageCodeAlreadyExists,
+        field: LanguageCodeInput
     ): Either<LanguageCodeErrors, LanguageCode> = field.validateFailFast(isExists)
 
     operator fun invoke(
-        fields: List<LanguageCodeInput>,
+        strategy: Strategy,
         isExists: LanguageCodeAlreadyExists,
-        strategy: Strategy
+        fields: List<LanguageCodeInput>
     ): Either<Nel<LanguageCodeErrors>, List<LanguageCode>> = when (strategy) {
         is Strategy.FailFast -> fields.traverse { it.validateFailFastNel(isExists) }
         is Strategy.ErrorAccumulation -> fields.traverse { it.validateErrorAccumulate(isExists) }
