@@ -17,7 +17,7 @@ value class CountryCode internal constructor(private val value: String) {
         fun of(
             value: CountryFormField,
             isExists: CountryCodeAlreadyExists
-        ): Either<Nel<CountryCodeErrors>, CountryCode> = CountryCodeRules(isExists, value)
+        ): Either<CountryCodeErrors, CountryCode> = CountryCodeRules(isExists, value)
     }
 
     fun code(): String = value
