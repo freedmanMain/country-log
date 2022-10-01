@@ -7,7 +7,7 @@ import io.github.country.log.usecases.`in`.LanguageCode
 import io.github.country.log.usecases.out.CountryI18N
 import io.github.country.log.usecases.repositories.CountryRepository
 
-class FindCountryI18nUseCase(
+class FindCountryI18nService(
     private val countryRepository: CountryRepository
 ) : FindCountryI18N {
 
