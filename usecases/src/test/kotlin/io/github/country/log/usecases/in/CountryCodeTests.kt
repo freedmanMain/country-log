@@ -6,13 +6,12 @@ import io.github.country.log.usecases.fixtures.CountryCodeAlreadyExistsFake
 import io.github.country.log.usecases.service.CountryCodeAlreadyExists
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.booleans.shouldBeTrue
-import io.kotest.matchers.shouldBe
 
 class CountryCodeTests : BehaviorSpec({
     given("I have some value that may be a country code") {
         `when`("I make country code with valid data") {
             then("The country code creation should be successful") {
-                val value = CountryFormField("UA")
+                val value = InputCountryField("UA")
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
                 val result = CountryCode.of(value = value, isExists = isExists)
@@ -23,7 +22,7 @@ class CountryCodeTests : BehaviorSpec({
 
         `when`("I make country code with blank code value") {
             then("The country code creation should be failure") {
-                val value = CountryFormField("")
+                val value = InputCountryField("")
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
                 val result =
@@ -33,11 +32,7 @@ class CountryCodeTests : BehaviorSpec({
 
                 result as Either.Left
 
-                val errors = result.value
-
-                errors.size shouldBe (1)
-
-                val error = errors.first()
+                val error = result.value
 
                 (error is CountryCodeErrors.EmptyCountryCode).shouldBeTrue()
             }
@@ -45,7 +40,7 @@ class CountryCodeTests : BehaviorSpec({
 
         `when`("I make country with non existent value") {
             then("The country code creation should be failure") {
-                val value = CountryFormField("RU")
+                val value = InputCountryField("RU")
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
                 val result =
@@ -55,11 +50,7 @@ class CountryCodeTests : BehaviorSpec({
 
                 result as Either.Left
 
-                val errors = result.value
-
-                errors.size shouldBe (1)
-
-                val error = errors.first()
+                val error = result.value
 
                 (error is CountryCodeErrors.CountryCodeNotExists).shouldBeTrue()
             }
