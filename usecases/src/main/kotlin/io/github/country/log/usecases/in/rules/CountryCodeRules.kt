@@ -1,4 +1,4 @@
-package io.github.country.log.usecases.`in`.validation
+package io.github.country.log.usecases.`in`.rules
 
 import arrow.core.Either
 import arrow.core.Nel
@@ -80,12 +80,12 @@ internal object CountryCodeRules {
     ): Either<CountryCodeErrors, CountryCode> = field.validateFailFast(isExists)
 
     operator fun invoke(
-        strategy: ValidationStrategy,
+        strategy: Strategy,
         isExists: CountryCodeAlreadyExists,
         fields: List<InputCountryField>
     ): Either<Nel<CountryCodeErrors>, List<CountryCode>> = when (strategy) {
-        is ValidationStrategy.FailFast -> fields.traverse { it.validateFailFastNel(isExists) }
+        is Strategy.FailFast -> fields.traverse { it.validateFailFastNel(isExists) }
 
-        is ValidationStrategy.ErrorAccumulation -> fields.traverse { it.validateErrorAccumulate(isExists) }.toEither()
+        is Strategy.ErrorAccumulation -> fields.traverse { it.validateErrorAccumulate(isExists) }.toEither()
     }
 }

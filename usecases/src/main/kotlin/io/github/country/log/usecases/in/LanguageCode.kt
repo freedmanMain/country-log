@@ -1,8 +1,8 @@
 package io.github.country.log.usecases.`in`
 
 import arrow.core.Either
-import io.github.country.log.usecases.`in`.validation.LanguageCodeErrors
-import io.github.country.log.usecases.`in`.validation.LanguageCodeRules
+import io.github.country.log.usecases.`in`.rules.LanguageCodeErrors
+import io.github.country.log.usecases.`in`.rules.LanguageCodeRules
 import io.github.country.log.usecases.service.LanguageCodeAlreadyExists
 
 @JvmInline

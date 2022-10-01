@@ -1,4 +1,4 @@
-package io.github.country.log.usecases.`in`.validation
+package io.github.country.log.usecases.`in`.rules
 
 import arrow.core.Either
 import arrow.core.Nel
@@ -78,10 +78,10 @@ internal object LanguageCodeRules {
     operator fun invoke(
         fields: List<LanguageCodeInput>,
         isExists: LanguageCodeAlreadyExists,
-        strategy: ValidationStrategy
+        strategy: Strategy
     ): Either<Nel<LanguageCodeErrors>, List<LanguageCode>> = when (strategy) {
-        is ValidationStrategy.FailFast -> fields.traverse { it.validateFailFastNel(isExists) }
-        is ValidationStrategy.ErrorAccumulation -> fields.traverse { it.validateErrorAccumulate(isExists) }
+        is Strategy.FailFast -> fields.traverse { it.validateFailFastNel(isExists) }
+        is Strategy.ErrorAccumulation -> fields.traverse { it.validateErrorAccumulate(isExists) }
             .toEither()
     }
 }

@@ -1,7 +1,7 @@
 package io.github.country.log.usecases.`in`
 
 import arrow.core.Either
-import io.github.country.log.usecases.`in`.validation.CountryCodeErrors
+import io.github.country.log.usecases.`in`.rules.CountryCodeErrors
 import io.github.country.log.usecases.fixtures.CountryCodeAlreadyExistsFake
 import io.github.country.log.usecases.service.CountryCodeAlreadyExists
 import io.kotest.core.spec.style.BehaviorSpec

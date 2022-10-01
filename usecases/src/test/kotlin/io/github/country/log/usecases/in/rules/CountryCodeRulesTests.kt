@@ -1,4 +1,4 @@
-package io.github.country.log.usecases.`in`.validation
+package io.github.country.log.usecases.`in`.rules
 
 import arrow.core.Either
 import io.github.country.log.usecases.`in`.InputCountryField
@@ -62,7 +62,7 @@ class CountryCodeRulesTests : BehaviorSpec({
                 val fields = listOf(InputCountryField("UA"), InputCountryField("EN"))
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
-                val result = CountryCodeRules(ValidationStrategy.FailFast, isExists, fields)
+                val result = CountryCodeRules(Strategy.FailFast, isExists, fields)
 
                 result.isRight().shouldBeTrue()
             }
@@ -73,7 +73,7 @@ class CountryCodeRulesTests : BehaviorSpec({
                 val fields = listOf(InputCountryField(""), InputCountryField(""))
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
-                val result = CountryCodeRules(ValidationStrategy.FailFast, isExists, fields)
+                val result = CountryCodeRules(Strategy.FailFast, isExists, fields)
 
                 result.isLeft().shouldBeTrue()
 
@@ -94,7 +94,7 @@ class CountryCodeRulesTests : BehaviorSpec({
                 val fields = listOf(InputCountryField("RU"), InputCountryField("NC"))
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
-                val result = CountryCodeRules(ValidationStrategy.FailFast, isExists, fields)
+                val result = CountryCodeRules(Strategy.FailFast, isExists, fields)
 
                 result.isLeft().shouldBeTrue()
 
@@ -115,7 +115,7 @@ class CountryCodeRulesTests : BehaviorSpec({
                 val fields = listOf(InputCountryField(""), InputCountryField(""))
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
-                val result = CountryCodeRules(ValidationStrategy.ErrorAccumulation, isExists, fields)
+                val result = CountryCodeRules(Strategy.ErrorAccumulation, isExists, fields)
 
                 result.isLeft().shouldBeTrue()
 
@@ -134,7 +134,7 @@ class CountryCodeRulesTests : BehaviorSpec({
                 val fields = listOf(InputCountryField("RU"), InputCountryField("NC"))
                 val isExists: CountryCodeAlreadyExists = CountryCodeAlreadyExistsFake()
 
-                val result = CountryCodeRules(ValidationStrategy.ErrorAccumulation, isExists, fields)
+                val result = CountryCodeRules(Strategy.ErrorAccumulation, isExists, fields)
 
                 result.isLeft().shouldBeTrue()
 
