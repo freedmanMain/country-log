@@ -19,36 +19,34 @@ import io.github.country.log.usecases.common.UseCaseError
 import io.github.country.log.usecases.service.CountryCodeAlreadyExists
 
 sealed class CountryCodeErrors : UseCaseError {
-
     object EmptyCountryCode : CountryCodeErrors()
-
     object CountryCodeNotExists : CountryCodeErrors()
-
     object NotAnCountryCode : CountryCodeErrors()
 }
 
 internal object CountryCodeRules {
 
-    private fun InputCountryField.isNotEmptyNel(): ValidatedNel<CountryCodeErrors, InputCountryField> =
+    private fun InputCountryField.isNotEmptyNel(): ValidatedNel<CountryCodeErrors.EmptyCountryCode, InputCountryField> =
         if (this.value.isBlank())
             CountryCodeErrors.EmptyCountryCode.invalidNel()
         else
             validNel()
 
-    private fun InputCountryField.isNotEmpty(): Validated<CountryCodeErrors, InputCountryField> =
+    private fun InputCountryField.isNotEmpty(): Validated<CountryCodeErrors.EmptyCountryCode, InputCountryField> =
         if (this.value.isBlank())
             CountryCodeErrors.EmptyCountryCode.invalid()
         else
             valid()
 
-
-    private fun InputCountryField.isExistsNel(isExists: CountryCodeAlreadyExists): ValidatedNel<CountryCodeErrors, InputCountryField> =
+    private fun InputCountryField.isExistsNel(isExists: CountryCodeAlreadyExists)
+            : ValidatedNel<CountryCodeErrors.CountryCodeNotExists, InputCountryField> =
         if (!isExists.check(this))
             CountryCodeErrors.CountryCodeNotExists.invalidNel()
         else
             validNel()
 
-    private fun InputCountryField.isExists(isExists: CountryCodeAlreadyExists): Validated<CountryCodeErrors, InputCountryField> =
+    private fun InputCountryField.isExists(isExists: CountryCodeAlreadyExists)
+            : Validated<CountryCodeErrors.CountryCodeNotExists, InputCountryField> =
         if (!isExists.check(this))
             CountryCodeErrors.CountryCodeNotExists.invalid()
         else
