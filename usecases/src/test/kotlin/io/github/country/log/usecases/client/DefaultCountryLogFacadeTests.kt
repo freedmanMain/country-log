@@ -7,8 +7,6 @@ import io.github.country.log.usecases.`in`.LanguageCode
 import io.github.country.log.usecases.`in`.LanguageCodeInput
 import io.github.country.log.usecases.`in`.rules.CountryCodeErrors
 import io.github.country.log.usecases.`in`.rules.LanguageCodeErrors
-import io.github.country.log.usecases.client.CountryLogFacade
-import io.github.country.log.usecases.client.DefaultCountryLogFacade
 import io.github.country.log.usecases.fixtures.CountryCodeAlreadyExistsFake
 import io.github.country.log.usecases.fixtures.FindCountryI18nFake
 import io.github.country.log.usecases.fixtures.LanguageCodeAlreadyExistsFake
@@ -22,7 +20,7 @@ class DefaultCountryLogFacadeTests : BehaviorSpec({
         `when`("Client provides valid data") {
             then("Client should receive valid country code") {
 
-                val facade: CountryLogFacade = DefaultCountryLogFacade(
+                val client: CountryLogClient = DefaultCountryLogClient(
                     countryCodeIsExists = CountryCodeAlreadyExistsFake(),
                     languageCodeIsExists = LanguageCodeAlreadyExistsFake(),
                     findCountryI18n = FindCountryI18nFake()
@@ -30,7 +28,7 @@ class DefaultCountryLogFacadeTests : BehaviorSpec({
 
                 val countryInput = CountryCodeInput("UA")
 
-                val result = facade.createCountryCode(countryInput)
+                val result = client.createCountryCode(countryInput)
 
                 result.isRight().shouldBeTrue()
             }
@@ -39,16 +37,16 @@ class DefaultCountryLogFacadeTests : BehaviorSpec({
         `when`("Client provides invalid data") {
             then("Client should receive error") {
 
-                val facade: CountryLogFacade = DefaultCountryLogFacade(
+                val client: CountryLogClient = DefaultCountryLogClient(
                     countryCodeIsExists = CountryCodeAlreadyExistsFake(),
                     languageCodeIsExists = LanguageCodeAlreadyExistsFake(),
                     findCountryI18n = FindCountryI18nFake()
                 )
 
-                facade.createCountryCode(CountryCodeInput(""))
+                client.createCountryCode(CountryCodeInput(""))
                     .shouldBeInstanceOf<Either.Left<CountryCodeErrors.EmptyCountryCode>>()
 
-                facade.createCountryCode(CountryCodeInput("RU"))
+                client.createCountryCode(CountryCodeInput("RU"))
                     .shouldBeInstanceOf<Either.Left<CountryCodeErrors.CountryCodeNotExists>>()
             }
         }
@@ -58,7 +56,7 @@ class DefaultCountryLogFacadeTests : BehaviorSpec({
         `when`("Client provides valid data") {
             then("Client should receive valid language code") {
 
-                val facade: CountryLogFacade = DefaultCountryLogFacade(
+                val client: CountryLogClient = DefaultCountryLogClient(
                     countryCodeIsExists = CountryCodeAlreadyExistsFake(),
                     languageCodeIsExists = LanguageCodeAlreadyExistsFake(),
                     findCountryI18n = FindCountryI18nFake()
@@ -66,7 +64,7 @@ class DefaultCountryLogFacadeTests : BehaviorSpec({
 
                 val input = LanguageCodeInput("UA")
 
-                val result = facade.createLanguageCode(input)
+                val result = client.createLanguageCode(input)
 
                 result.isRight().shouldBeTrue()
             }
@@ -75,16 +73,16 @@ class DefaultCountryLogFacadeTests : BehaviorSpec({
         `when`("Client provides invalid data") {
             then("Client should receive error") {
 
-                val facade: CountryLogFacade = DefaultCountryLogFacade(
+                val client: CountryLogClient = DefaultCountryLogClient(
                     countryCodeIsExists = CountryCodeAlreadyExistsFake(),
                     languageCodeIsExists = LanguageCodeAlreadyExistsFake(),
                     findCountryI18n = FindCountryI18nFake()
                 )
 
-                facade.createLanguageCode(LanguageCodeInput(""))
+                client.createLanguageCode(LanguageCodeInput(""))
                     .shouldBeInstanceOf<Either.Left<LanguageCodeErrors.EmptyLanguageCode>>()
 
-                facade.createLanguageCode(LanguageCodeInput("RU"))
+                client.createLanguageCode(LanguageCodeInput("RU"))
                     .shouldBeInstanceOf<Either.Left<LanguageCodeErrors.LanguageCodeNotExists>>()
             }
         }
@@ -94,7 +92,7 @@ class DefaultCountryLogFacadeTests : BehaviorSpec({
         `when`("i18n name existent in system") {
             then("Client should receive i18n name for country") {
 
-                val facade: CountryLogFacade = DefaultCountryLogFacade(
+                val client: CountryLogClient = DefaultCountryLogClient(
                     countryCodeIsExists = CountryCodeAlreadyExistsFake(),
                     languageCodeIsExists = LanguageCodeAlreadyExistsFake(),
                     findCountryI18n = FindCountryI18nFake()
@@ -103,7 +101,7 @@ class DefaultCountryLogFacadeTests : BehaviorSpec({
                 val languageCode = LanguageCode("EN")
                 val countryCode = CountryCode("UA")
 
-                val result = facade.findI18nForCountry(countryCode, languageCode)
+                val result = client.findI18nForCountry(countryCode, languageCode)
 
                 result.isRight().shouldBeTrue()
 
@@ -116,7 +114,7 @@ class DefaultCountryLogFacadeTests : BehaviorSpec({
         `when`("i18n name non existent in system") {
             then("Client should receive error") {
 
-                val facade: CountryLogFacade = DefaultCountryLogFacade(
+                val client: CountryLogClient = DefaultCountryLogClient(
                     countryCodeIsExists = CountryCodeAlreadyExistsFake(),
                     languageCodeIsExists = LanguageCodeAlreadyExistsFake(),
                     findCountryI18n = FindCountryI18nFake()
@@ -125,7 +123,7 @@ class DefaultCountryLogFacadeTests : BehaviorSpec({
                 val languageCode = LanguageCode("EN")
                 val countryCode = CountryCode("RU")
 
-                val result = facade.findI18nForCountry(countryCode, languageCode)
+                val result = client.findI18nForCountry(countryCode, languageCode)
 
                 result.shouldBeInstanceOf<Either.Left<I18nForCountryNotFound>>()
             }

@@ -10,7 +10,7 @@ import io.github.country.log.usecases.`in`.rules.LanguageCodeErrors
 import io.github.country.log.usecases.common.UseCaseError
 import io.github.country.log.usecases.out.CountryI18N
 
-interface CountryLogFacade {
+interface CountryLogClient {
     fun createCountryCode(countryCodeInput: CountryCodeInput): Either<CountryCodeErrors, CountryCode>
 
     fun createLanguageCode(languageCodeInput: LanguageCodeInput): Either<LanguageCodeErrors, LanguageCode>

@@ -12,11 +12,11 @@ import io.github.country.log.usecases.services.CountryCodeAlreadyExists
 import io.github.country.log.usecases.services.FindCountryI18N
 import io.github.country.log.usecases.services.LanguageCodeAlreadyExists
 
-class DefaultCountryLogFacade(
+class DefaultCountryLogClient(
     private val countryCodeIsExists: CountryCodeAlreadyExists,
     private val languageCodeIsExists: LanguageCodeAlreadyExists,
     private val findCountryI18n: FindCountryI18N
-) : CountryLogFacade {
+) : CountryLogClient {
 
     override fun createCountryCode(countryCodeInput: CountryCodeInput): Either<CountryCodeErrors, CountryCode> =
         CountryCode.of(countryCodeInput, countryCodeIsExists)
