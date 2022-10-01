@@ -2,9 +2,9 @@
 /target/
 *.iml
 
-/usecases/target/
+/countryLog/target/
 
-/rest/target/
-/rest/HELP.md
-/rest/mvnw*
-/rest/.mvn
+/countryLogClient/target/
+/countryLogClient/HELP.md
+/countryLogClient/mvnw*
+/countryLogClient/.mvn

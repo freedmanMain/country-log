@@ -150,8 +150,8 @@
 
         <!--Modules -->
         <dependency>
-            <groupId>io.github.country.log.usecases</groupId>
-            <artifactId>usecases</artifactId>
+            <groupId>io.github.country.log.domain</groupId>
+            <artifactId>domain</artifactId>
             <version>${usecases.module.version}</version>
             <exclusions>
                 <exclusion>

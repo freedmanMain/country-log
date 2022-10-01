@@ -7,7 +7,7 @@
     <artifactId>country-log</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>usecases</module>
+        <module>countryLog</module>
         <module>countryLogClient</module>
     </modules>
     <packaging>pom</packaging>
