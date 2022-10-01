@@ -1,4 +1,4 @@
-package io.github.country.log.rest
+package io.github.country.log.client
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
