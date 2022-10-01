@@ -26,6 +26,9 @@
         <junit-jupiter.version>5.4.0</junit-jupiter.version>
         <junit-platform.version>1.4.0</junit-platform.version>
         <mockito-kotlin.version>2.2.0</mockito-kotlin.version>
+
+        <!--Modules -->
+        <usecases.module.version>1.0-SNAPSHOT</usecases.module.version>
     </properties>
 
     <dependencies>
@@ -78,12 +81,6 @@
                     <artifactId>junit-jupiter-params</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>io.kotest</groupId>
-            <artifactId>kotest-runner-junit5-jvm</artifactId>
-            <version>${kotest.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -140,9 +137,32 @@
         <!--KoTest -->
         <dependency>
             <groupId>io.kotest</groupId>
+            <artifactId>kotest-runner-junit5-jvm</artifactId>
+            <version>${kotest.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.kotest</groupId>
             <artifactId>kotest-assertions-core-jvm</artifactId>
             <version>${kotest.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!--Modules -->
+        <dependency>
+            <groupId>io.github.country.log.usecases</groupId>
+            <artifactId>usecases</artifactId>
+            <version>${usecases.module.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.kotest</groupId>
+                    <artifactId>kotest-runner-junit5-jvm</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.kotest</groupId>
+                    <artifactId>kotest-assertions-core-jvm</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
