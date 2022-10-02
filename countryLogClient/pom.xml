@@ -28,7 +28,8 @@
         <mockito-kotlin.version>2.2.0</mockito-kotlin.version>
 
         <!--Modules -->
-        <usecases.module.version>1.0-SNAPSHOT</usecases.module.version>
+        <domain.module.version>1.0-SNAPSHOT</domain.module.version>
+        <inMem.persistence.module.version>1.0-SNAPSHOT</inMem.persistence.module.version>
     </properties>
 
     <dependencies>
@@ -121,18 +122,18 @@
             <scope>test</scope>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.mockito</groupId>-->
-<!--            <artifactId>mockito-core</artifactId>-->
-<!--            <version>${mockito.version}</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.mockito</groupId>-->
-<!--            <artifactId>mockito-junit-jupiter</artifactId>-->
-<!--            <version>${mockito.version}</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.mockito</groupId>-->
+        <!--            <artifactId>mockito-core</artifactId>-->
+        <!--            <version>${mockito.version}</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.mockito</groupId>-->
+        <!--            <artifactId>mockito-junit-jupiter</artifactId>-->
+        <!--            <version>${mockito.version}</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
 
         <!--KoTest -->
         <dependency>
@@ -148,11 +149,17 @@
             <scope>test</scope>
         </dependency>
 
+        <!--Spring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-hateoas</artifactId>
+        </dependency>
+
         <!--Modules -->
         <dependency>
             <groupId>io.github.country.log.domain</groupId>
             <artifactId>domain</artifactId>
-            <version>${usecases.module.version}</version>
+            <version>${domain.module.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>io.kotest</groupId>
@@ -163,6 +170,12 @@
                     <artifactId>kotest-assertions-core-jvm</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.country.log.inmem.persistence</groupId>
+            <artifactId>inMemPersistence</artifactId>
+            <version>${inMem.persistence.module.version}</version>
         </dependency>
     </dependencies>
 

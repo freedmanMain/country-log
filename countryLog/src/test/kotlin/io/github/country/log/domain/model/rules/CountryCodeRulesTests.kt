@@ -2,10 +2,10 @@ package io.github.country.log.domain.model.rules
 
 import arrow.core.Either
 import arrow.core.Nel
-import io.github.country.log.domain.fixtures.CountryAlreadyExistsFake
+import io.github.country.log.domain.fakes.CountryRepositoryFake
 import io.github.country.log.domain.model.CountryCode
+import io.github.country.log.domain.model.CountryRepository
 import io.github.country.log.domain.model.errors.CountryCodeCreationErrors
-import io.github.country.log.domain.services.CountryAlreadyExists
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
@@ -16,9 +16,9 @@ internal class CountryCodeRulesTests : BehaviorSpec({
         `when`("validate country code with valid data") {
             then("should be success") {
                 val request = "UA"
-                val countryAlreadyExists: CountryAlreadyExists = CountryAlreadyExistsFake()
+                val repository: CountryRepository = CountryRepositoryFake()
 
-                val result = CountryCodeRules(countryAlreadyExists, request)
+                val result = CountryCodeRules(repository, request)
 
                 result.all { it.asString() == "UA" }.shouldBeTrue()
             }
@@ -27,9 +27,9 @@ internal class CountryCodeRulesTests : BehaviorSpec({
         `when`("validate country code with blank value") {
             then("should be failure") {
                 val request = ""
-                val countryAlreadyExists: CountryAlreadyExists = CountryAlreadyExistsFake()
+                val repository: CountryRepository = CountryRepositoryFake()
 
-                val result = CountryCodeRules(countryAlreadyExists, request)
+                val result = CountryCodeRules(repository, request)
 
                 result.shouldBeInstanceOf<Either.Left<CountryCodeCreationErrors.BlankCountryCodeError>>()
             }
@@ -38,7 +38,7 @@ internal class CountryCodeRulesTests : BehaviorSpec({
         `when`("validate country code input with non existent value") {
             then("should be failure") {
                 val value = "RU"
-                val exists: CountryAlreadyExists = CountryAlreadyExistsFake()
+                val exists: CountryRepository = CountryRepositoryFake()
 
                 val result = CountryCodeRules(exists, value)
 
@@ -51,9 +51,9 @@ internal class CountryCodeRulesTests : BehaviorSpec({
         `when`("validate country codes with valid data using 'FastFail' strategy") {
             then("should be success") {
                 val requestList = listOf("UA", "EN")
-                val countryAlreadyExists: CountryAlreadyExists = CountryAlreadyExistsFake()
+                val repository: CountryRepository = CountryRepositoryFake()
 
-                val result = CountryCodeRules(ValidationStrategy.FailFast, countryAlreadyExists, requestList)
+                val result = CountryCodeRules(ValidationStrategy.FailFast, repository, requestList)
 
                 result.shouldBeInstanceOf<Either.Right<List<CountryCode>>>()
                 result.value.shouldBe(listOf(CountryCode("UA"), CountryCode("EN")))
@@ -63,9 +63,9 @@ internal class CountryCodeRulesTests : BehaviorSpec({
         `when`("validate country codes with blank values using 'FailFast' strategy") {
             then("should be failure") {
                 val requestList = listOf("", " ")
-                val countryAlreadyExists: CountryAlreadyExists = CountryAlreadyExistsFake()
+                val repository: CountryRepository = CountryRepositoryFake()
 
-                val result = CountryCodeRules(ValidationStrategy.FailFast, countryAlreadyExists, requestList)
+                val result = CountryCodeRules(ValidationStrategy.FailFast, repository, requestList)
 
                 result.shouldBeInstanceOf<Either.Left<Nel<CountryCodeCreationErrors.BlankCountryCodeError>>>()
                 result.value.size shouldBe 1
@@ -75,9 +75,9 @@ internal class CountryCodeRulesTests : BehaviorSpec({
         `when`("validate country codes with unknown values using 'FailFast' strategy") {
             then("should be failure") {
                 val requestList = listOf("RU", "NC")
-                val countryAlreadyExists: CountryAlreadyExists = CountryAlreadyExistsFake()
+                val repository: CountryRepository = CountryRepositoryFake()
 
-                val result = CountryCodeRules(ValidationStrategy.FailFast, countryAlreadyExists, requestList)
+                val result = CountryCodeRules(ValidationStrategy.FailFast, repository, requestList)
 
                 result.shouldBeInstanceOf<Either.Left<Nel<CountryCodeCreationErrors.CountryCodeNotExistsError>>>()
                 result.value.size shouldBe 1
@@ -87,9 +87,9 @@ internal class CountryCodeRulesTests : BehaviorSpec({
         `when`("validate country codes with valid data using 'ErrorAccumulation' strategy") {
             then("should be success") {
                 val requestList = listOf("UA", "EN")
-                val countryAlreadyExists: CountryAlreadyExists = CountryAlreadyExistsFake()
+                val repository: CountryRepository = CountryRepositoryFake()
 
-                val result = CountryCodeRules(ValidationStrategy.ErrorAccumulation, countryAlreadyExists, requestList)
+                val result = CountryCodeRules(ValidationStrategy.ErrorAccumulation, repository, requestList)
 
                 result.shouldBeInstanceOf<Either.Right<List<CountryCode>>>()
                 result.value shouldBe (listOf(CountryCode("UA"), CountryCode("EN")))
@@ -99,9 +99,9 @@ internal class CountryCodeRulesTests : BehaviorSpec({
         `when`("validate country codes with blank values using 'ErrorAccumulation' strategy") {
             then("should be failure") {
                 val requestList = listOf("", " ")
-                val countryAlreadyExists: CountryAlreadyExists = CountryAlreadyExistsFake()
+                val repository: CountryRepository = CountryRepositoryFake()
 
-                val result = CountryCodeRules(ValidationStrategy.ErrorAccumulation, countryAlreadyExists, requestList)
+                val result = CountryCodeRules(ValidationStrategy.ErrorAccumulation, repository, requestList)
 
                 result.shouldBeInstanceOf<Either.Left<Nel<CountryCodeCreationErrors.NotAtCountryCodeError>>>()
                 result.value.size shouldBe 2
@@ -111,9 +111,9 @@ internal class CountryCodeRulesTests : BehaviorSpec({
         `when`("validate country codes with unknown values using 'ErrorAccumulation' strategy") {
             then("should be failure") {
                 val requestList = listOf("RU", "NC")
-                val countryAlreadyExists: CountryAlreadyExists = CountryAlreadyExistsFake()
+                val repository: CountryRepository = CountryRepositoryFake()
 
-                val result = CountryCodeRules(ValidationStrategy.ErrorAccumulation, countryAlreadyExists, requestList)
+                val result = CountryCodeRules(ValidationStrategy.ErrorAccumulation, repository, requestList)
 
                 result.shouldBeInstanceOf<Either.Left<Nel<CountryCodeCreationErrors.NotAtCountryCodeError>>>()
                 result.value.size shouldBe 2

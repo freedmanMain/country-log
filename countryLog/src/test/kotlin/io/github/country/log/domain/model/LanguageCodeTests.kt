@@ -1,9 +1,8 @@
 package io.github.country.log.domain.model
 
 import arrow.core.Either
-import io.github.country.log.domain.fixtures.LanguageAlreadyExistsFake
+import io.github.country.log.domain.fakes.LanguageRepositoryFake
 import io.github.country.log.domain.model.errors.LanguageCodeCreationErrors
-import io.github.country.log.domain.services.LanguageAlreadyExists
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -13,9 +12,9 @@ internal class LanguageCodeTests : BehaviorSpec({
         `when`("make language code with valid data") {
             then("language code creation should be successful") {
                 val request = "UA"
-                val languageAlreadyExists: LanguageAlreadyExists = LanguageAlreadyExistsFake()
+                val repository: LanguageRepository = LanguageRepositoryFake()
 
-                val result = LanguageCode.make(request, languageAlreadyExists)
+                val result = LanguageCode.make(request, repository)
 
                 result.all { it.asString() == "UA" }.shouldBeTrue()
             }
@@ -24,9 +23,9 @@ internal class LanguageCodeTests : BehaviorSpec({
         `when`("make language code with blank value") {
             then("language code creation should be failure") {
                 val request = ""
-                val languageAlreadyExists: LanguageAlreadyExists = LanguageAlreadyExistsFake()
+                val repository: LanguageRepository = LanguageRepositoryFake()
 
-                val result = LanguageCode.make(request, languageAlreadyExists)
+                val result = LanguageCode.make(request, repository)
 
                 result.shouldBeInstanceOf<Either.Left<LanguageCodeCreationErrors.BlankLanguageCodeError>>()
             }
@@ -35,9 +34,9 @@ internal class LanguageCodeTests : BehaviorSpec({
         `when`("make language code with unknown value") {
             then("language code creation should be failure") {
                 val request = "RU"
-                val languageAlreadyExists: LanguageAlreadyExists = LanguageAlreadyExistsFake()
+                val repository: LanguageRepository = LanguageRepositoryFake()
 
-                val result = LanguageCode.make(request, languageAlreadyExists)
+                val result = LanguageCode.make(request, repository)
 
                 result.shouldBeInstanceOf<Either.Left<LanguageCodeCreationErrors.LanguageCodeNotExistsError>>()
             }

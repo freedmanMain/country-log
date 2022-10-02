@@ -14,8 +14,8 @@ import arrow.core.validNel
 import arrow.core.zip
 import arrow.typeclasses.Semigroup
 import io.github.country.log.domain.model.LanguageCode
+import io.github.country.log.domain.model.LanguageRepository
 import io.github.country.log.domain.model.errors.LanguageCodeCreationErrors
-import io.github.country.log.domain.services.LanguageAlreadyExists
 
 internal object LanguageCodeRules {
     private fun String.notBlank(): Validated<LanguageCodeCreationErrors.BlankLanguageCodeError, String> =
@@ -30,51 +30,51 @@ internal object LanguageCodeRules {
         else
             validNel()
 
-    private fun String.notUnknownNel(languageAlreadyExists: LanguageAlreadyExists): ValidatedNel<LanguageCodeCreationErrors.LanguageCodeNotExistsError, String> =
-        if (!languageAlreadyExists.check(this))
+    private fun String.alreadyExistsNel(repository: LanguageRepository): ValidatedNel<LanguageCodeCreationErrors.LanguageCodeNotExistsError, String> =
+        if (!repository.alreadyExists(this))
             LanguageCodeCreationErrors.LanguageCodeNotExistsError.invalidNel()
         else
             validNel()
 
-    private fun String.notUnknown(languageAlreadyExists: LanguageAlreadyExists)
-            : Validated<LanguageCodeCreationErrors.LanguageCodeNotExistsError, String> = if (!languageAlreadyExists.check(this))
+    private fun String.alreadyExists(repository: LanguageRepository)
+            : Validated<LanguageCodeCreationErrors.LanguageCodeNotExistsError, String> = if (!repository.alreadyExists(this))
         LanguageCodeCreationErrors.LanguageCodeNotExistsError.invalid()
     else
         valid()
 
-    private fun String.validateFailFast(languageAlreadyExists: LanguageAlreadyExists)
+    private fun String.validateFailFast(repository: LanguageRepository)
             : Either<LanguageCodeCreationErrors, LanguageCode> = either.eager {
         notBlank().bind()
-        notUnknown(languageAlreadyExists).bind()
+        alreadyExists(repository).bind()
         LanguageCode(this@validateFailFast)
     }
 
-    private fun String.validateFailFastNel(languageAlreadyExists: LanguageAlreadyExists)
+    private fun String.validateFailFastNel(repository: LanguageRepository)
             : Either<Nel<LanguageCodeCreationErrors>, LanguageCode> = either.eager {
         notBlankNel().bind()
-        notUnknownNel(languageAlreadyExists).bind()
+        alreadyExistsNel(repository).bind()
         LanguageCode(this@validateFailFastNel)
     }
 
-    private fun String.validateErrorAccumulate(languageAlreadyExists: LanguageAlreadyExists)
+    private fun String.validateErrorAccumulate(repository: LanguageRepository)
             : ValidatedNel<LanguageCodeCreationErrors, LanguageCode> = notBlankNel().zip(
         Semigroup.nonEmptyList(),
-        notUnknownNel(languageAlreadyExists)
+        alreadyExistsNel(repository)
     ) { _, _ -> LanguageCode(this@validateErrorAccumulate) }
         .handleErrorWith { LanguageCodeCreationErrors.NotAtLanguageError.invalidNel() }
 
     internal operator fun invoke(
-        languageAlreadyExists: LanguageAlreadyExists,
+        repository: LanguageRepository,
         data: String
-    ): Either<LanguageCodeCreationErrors, LanguageCode> = data.validateFailFast(languageAlreadyExists)
+    ): Either<LanguageCodeCreationErrors, LanguageCode> = data.validateFailFast(repository)
 
     internal operator fun invoke(
         strategy: ValidationStrategy,
-        languageAlreadyExists: LanguageAlreadyExists,
+        repository: LanguageRepository,
         dataList: List<String>
     ): Either<Nel<LanguageCodeCreationErrors>, List<LanguageCode>> = when (strategy) {
-        is ValidationStrategy.FailFast -> dataList.traverse { it.validateFailFastNel(languageAlreadyExists) }
-        is ValidationStrategy.ErrorAccumulation -> dataList.traverse { it.validateErrorAccumulate(languageAlreadyExists) }
+        is ValidationStrategy.FailFast -> dataList.traverse { it.validateFailFastNel(repository) }
+        is ValidationStrategy.ErrorAccumulation -> dataList.traverse { it.validateErrorAccumulate(repository) }
             .toEither()
     }
 }

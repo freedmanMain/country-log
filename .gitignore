@@ -8,3 +8,5 @@
 /countryLogClient/HELP.md
 /countryLogClient/mvnw*
 /countryLogClient/.mvn
+
+/inMemPersistence/target/
