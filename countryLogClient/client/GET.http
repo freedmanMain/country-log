@@ -1,3 +1,0 @@
-### get country name
-GET http://localhost:8080/rest/countryLog/v1/countries/UA/name?lang=EN
-Accept: application/json
