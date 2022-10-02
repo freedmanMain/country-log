@@ -1,19 +1,19 @@
 package io.github.country.log.domain.fixtures
 
 import arrow.core.Either
-import io.github.country.log.domain.client.CountryLogClient
+import io.github.country.log.domain.client.Client
+import io.github.country.log.domain.extractor.LocaleDataExtractor
 import io.github.country.log.domain.model.CountryCode
 import io.github.country.log.domain.model.LanguageCode
 import io.github.country.log.domain.model.errors.LocaleNameNotFoundError
-import io.github.country.log.domain.services.FindLocaleName
 import io.github.country.log.domain.services.result.LocaleName
 
-internal class CountryLogClientFake(
-    private val findLocaleName: FindLocaleName
-) : CountryLogClient {
-    override fun findLocaleName(
+internal class ClientFake(
+    private val extractor: LocaleDataExtractor
+) : Client {
+    override fun provideLocaleName(
         country: CountryCode,
         language: LanguageCode
     ): Either<LocaleNameNotFoundError, LocaleName> =
-        findLocaleName.find(country, language).toEither { LocaleNameNotFoundError }
+        extractor.extract(country, language).toEither { LocaleNameNotFoundError }
 }

@@ -12,7 +12,7 @@ public class LanguageAlreadyExistsService(
 ) : LanguageAlreadyExists {
 
     public override fun check(data: String): Boolean =
-        extractor.isNotUnknown(data.toDestination())
+        extractor.extract(data.toDestination()).isNotEmpty()
 
     private fun String.toDestination(): DestinationLanguageCode = DestinationLanguageCode(this)
 }

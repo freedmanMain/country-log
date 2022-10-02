@@ -1,14 +1,17 @@
 package io.github.country.log.domain.fixtures
 
+import arrow.core.Option
+import arrow.core.toOption
 import io.github.country.log.domain.extractor.LanguageExtractor
 import io.github.country.log.domain.extractor.model.DestinationLanguageCode
+import io.github.country.log.domain.model.LanguageCode
 
 internal class InMemLanguageExtractor : LanguageExtractor {
-    private val inMemDb = mutableMapOf<DestinationLanguageCode, String>()
+    private val inMemDb = mutableMapOf<DestinationLanguageCode, LanguageCode>()
         .apply {
-            this[DestinationLanguageCode("EN")] = """ { code: "EN" } """
-            this[DestinationLanguageCode("UA")] = """ { code: "UA" } """
+            this[DestinationLanguageCode("EN")] = LanguageCode("EN")
+            this[DestinationLanguageCode("UA")] = LanguageCode("UA")
         }
 
-    override fun isNotUnknown(dst: DestinationLanguageCode): Boolean = inMemDb[dst] != null
+    override fun extract(dst: DestinationLanguageCode): Option<LanguageCode> = inMemDb[dst].toOption()
 }

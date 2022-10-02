@@ -1,6 +1,6 @@
 package io.github.country.log.domain.services
 
-import io.github.country.log.domain.fixtures.InMemCountryCodeExtractor
+import io.github.country.log.domain.fixtures.InMemCountryExtractor
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
@@ -10,7 +10,7 @@ internal class CountryAlreadyExistsServiceTests : BehaviorSpec({
         `when`("passed data was found") {
             then("should return true") {
                 val request = "UA"
-                val countryAlreadyExists: CountryAlreadyExists = CountryAlreadyExistsService(InMemCountryCodeExtractor())
+                val countryAlreadyExists: CountryAlreadyExists = CountryAlreadyExistsService(InMemCountryExtractor())
 
                 countryAlreadyExists.check(request).shouldBeTrue()
             }
@@ -19,7 +19,7 @@ internal class CountryAlreadyExistsServiceTests : BehaviorSpec({
         `when`("passed data was not found") {
             then("should return false") {
                 val request = "RU"
-                val countryAlreadyExists: CountryAlreadyExists = CountryAlreadyExistsService(InMemCountryCodeExtractor())
+                val countryAlreadyExists: CountryAlreadyExists = CountryAlreadyExistsService(InMemCountryExtractor())
 
                 countryAlreadyExists.check(request).shouldBeFalse()
             }
