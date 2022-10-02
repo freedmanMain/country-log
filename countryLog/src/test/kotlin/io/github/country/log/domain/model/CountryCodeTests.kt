@@ -9,13 +9,13 @@ import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.types.shouldBeInstanceOf
 
 internal class CountryCodeTests : BehaviorSpec({
-    given("request that represents country code") {
+    given("data that represents country code") {
         `when`("make country code with valid data") {
             then("country code creation should be successful") {
-                val request = CountryCodeRequest("UA")
+                val data = "UA"
                 val countryAlreadyExists: CountryAlreadyExists = CountryAlreadyExistsFake()
 
-                val result = CountryCode.make(request, countryAlreadyExists)
+                val result = CountryCode.make(data, countryAlreadyExists)
 
                 result.all { it.asString() == "UA" }.shouldBeTrue()
             }
@@ -23,18 +23,18 @@ internal class CountryCodeTests : BehaviorSpec({
 
         `when`("make country code with blank code value") {
             then("country code creation should be failure") {
-                val request = CountryCodeRequest("")
+                val data = ""
                 val countryAlreadyExists: CountryAlreadyExists = CountryAlreadyExistsFake()
 
-                val result = CountryCode.make(request, countryAlreadyExists)
+                val result = CountryCode.make(data, countryAlreadyExists)
 
                 result.shouldBeInstanceOf<Either.Left<CountryCodeCreationErrors.BlankCountryCodeError>>()
             }
         }
 
         `when`("make country with unknown value") {
-            then("The country code creation should be failure") {
-                val request = CountryCodeRequest("RU")
+            then("country code creation should be failure") {
+                val request = "RU"
                 val countryAlreadyExists: CountryAlreadyExists = CountryAlreadyExistsFake()
 
                 val result = CountryCode.make(request, countryAlreadyExists)

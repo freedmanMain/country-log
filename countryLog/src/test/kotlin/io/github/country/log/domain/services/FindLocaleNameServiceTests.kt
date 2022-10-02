@@ -6,7 +6,7 @@ import io.github.country.log.domain.fixtures.InMemCountryExtractor
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 
-class FindLocaleNameServiceTests : BehaviorSpec({
+internal class FindLocaleNameServiceTests : BehaviorSpec({
     given("language and country codes") {
         `when`("locale name was found") {
             then("should return data") {

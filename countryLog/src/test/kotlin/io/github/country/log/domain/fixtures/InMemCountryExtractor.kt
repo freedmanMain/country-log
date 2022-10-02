@@ -4,7 +4,7 @@ import io.github.country.log.domain.model.CountryCode
 import io.github.country.log.domain.model.LanguageCode
 import io.github.country.log.domain.extractor.CountryExtractor
 
-class InMemCountryExtractor : CountryExtractor {
+internal class InMemCountryExtractor : CountryExtractor {
     private val inMemDb = mutableMapOf<Pair<CountryCode, LanguageCode>, String>()
         .apply {
             this[CountryCode("UA") to LanguageCode("EN")] = "Ukraine"

@@ -2,7 +2,6 @@ package io.github.country.log.domain.model.rules
 
 import arrow.core.Either
 import arrow.core.Nel
-import io.github.country.log.domain.model.LanguageCodeRequest
 import io.github.country.log.domain.fixtures.LanguageAlreadyExistsFake
 import io.github.country.log.domain.model.LanguageCode
 import io.github.country.log.domain.model.errors.LanguageCodeCreationErrors
@@ -13,13 +12,13 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
 internal class LanguageCodeRulesTests : BehaviorSpec({
-    given("request that represents language code") {
+    given("data that represents language code") {
         `when`("validate with valid data") {
             then("should be success") {
-                val request = LanguageCodeRequest("UA")
+                val data = "UA"
                 val languageAlreadyExists: LanguageAlreadyExists = LanguageAlreadyExistsFake()
 
-                val result = LanguageCodeRules(languageAlreadyExists, request)
+                val result = LanguageCodeRules(languageAlreadyExists, data)
 
                 result.all { it.asString() == "UA" }.shouldBeTrue()
             }
@@ -27,10 +26,10 @@ internal class LanguageCodeRulesTests : BehaviorSpec({
 
         `when`("validate language code with blank value") {
             then("should be failure") {
-                val request = LanguageCodeRequest("")
+                val data = ""
                 val languageAlreadyExists: LanguageAlreadyExists = LanguageAlreadyExistsFake()
 
-                val result = LanguageCodeRules(languageAlreadyExists, request)
+                val result = LanguageCodeRules(languageAlreadyExists, data)
 
                 result.shouldBeInstanceOf<Either.Left<LanguageCodeCreationErrors.BlankLanguageCodeError>>()
             }
@@ -38,10 +37,10 @@ internal class LanguageCodeRulesTests : BehaviorSpec({
 
         `when`("validate language code with unknown value") {
             then("should be failure") {
-                val request = LanguageCodeRequest("RU")
+                val data = "RU"
                 val languageAlreadyExists: LanguageAlreadyExists = LanguageAlreadyExistsFake()
 
-                val result = LanguageCodeRules(languageAlreadyExists, request)
+                val result = LanguageCodeRules(languageAlreadyExists, data)
 
                 result.shouldBeInstanceOf<Either.Left<LanguageCodeCreationErrors.LanguageCodeNotExistsError>>()
             }
@@ -51,10 +50,10 @@ internal class LanguageCodeRulesTests : BehaviorSpec({
     given("request that represents list of language codes") {
         `when`("validate language codes with valid data using 'FastFail' strategy") {
             then("should be success") {
-                val requestList = listOf(LanguageCodeRequest("UA"), LanguageCodeRequest("EN"))
+                val dataList = listOf("UA", "EN")
                 val languageAlreadyExists: LanguageAlreadyExists = LanguageAlreadyExistsFake()
 
-                val result = LanguageCodeRules(ValidationStrategy.FailFast, languageAlreadyExists, requestList)
+                val result = LanguageCodeRules(ValidationStrategy.FailFast, languageAlreadyExists, dataList)
 
                 result.shouldBeInstanceOf<Either.Right<List<LanguageCode>>>()
                 result.value.shouldBe(listOf(LanguageCode("UA"), LanguageCode("EN")))
@@ -63,7 +62,7 @@ internal class LanguageCodeRulesTests : BehaviorSpec({
 
         `when`("validate language codes with blank values using 'FailFast' strategy") {
             then("should be failure") {
-                val requestList = listOf(LanguageCodeRequest(""), LanguageCodeRequest(""))
+                val requestList = listOf("", " ")
                 val languageAlreadyExists: LanguageAlreadyExists = LanguageAlreadyExistsFake()
 
                 val result = LanguageCodeRules(ValidationStrategy.FailFast, languageAlreadyExists, requestList)
@@ -75,7 +74,7 @@ internal class LanguageCodeRulesTests : BehaviorSpec({
 
         `when`("validate language codes with unknown values using 'FailFast' strategy") {
             then("should be failure") {
-                val requestList = listOf(LanguageCodeRequest("RU"), LanguageCodeRequest("NC"))
+                val requestList = listOf("RU", "NC")
                 val languageAlreadyExists: LanguageAlreadyExists = LanguageAlreadyExistsFake()
 
                 val result = LanguageCodeRules(ValidationStrategy.FailFast, languageAlreadyExists, requestList)
@@ -87,7 +86,7 @@ internal class LanguageCodeRulesTests : BehaviorSpec({
 
         `when`("validate language codes with valid data using 'ErrorAccumulation' strategy") {
             then("should be success") {
-                val requestList = listOf(LanguageCodeRequest("UA"), LanguageCodeRequest("EN"))
+                val requestList = listOf("UA", "EN")
                 val languageAlreadyExists: LanguageAlreadyExists = LanguageAlreadyExistsFake()
 
                 val result = LanguageCodeRules(ValidationStrategy.ErrorAccumulation, languageAlreadyExists, requestList)
@@ -99,7 +98,7 @@ internal class LanguageCodeRulesTests : BehaviorSpec({
 
         `when`("validate language codes with blank values using 'ErrorAccumulation' strategy") {
             then("should be failure") {
-                val requestList = listOf(LanguageCodeRequest(""), LanguageCodeRequest(""))
+                val requestList = listOf("", " ")
                 val languageAlreadyExists: LanguageAlreadyExists = LanguageAlreadyExistsFake()
 
                 val result = LanguageCodeRules(ValidationStrategy.ErrorAccumulation, languageAlreadyExists, requestList)
@@ -111,7 +110,7 @@ internal class LanguageCodeRulesTests : BehaviorSpec({
 
         `when`("validate language codes with unknown values using 'ErrorAccumulation' strategy") {
             then("should be failure") {
-                val requestList = listOf(LanguageCodeRequest("RU"), LanguageCodeRequest("NC"))
+                val requestList = listOf("RU", "NC")
                 val languageAlreadyExists: LanguageAlreadyExists = LanguageAlreadyExistsFake()
 
                 val result = LanguageCodeRules(ValidationStrategy.ErrorAccumulation, languageAlreadyExists, requestList)

@@ -8,13 +8,12 @@ import io.github.country.log.domain.model.errors.LocaleNameNotFoundError
 import io.github.country.log.domain.services.FindLocaleName
 import io.github.country.log.domain.services.result.LocaleName
 
-class CountryLogClientFake(
+internal class CountryLogClientFake(
     private val findLocaleName: FindLocaleName
 ) : CountryLogClient {
     override fun findLocaleName(
         country: CountryCode,
         language: LanguageCode
     ): Either<LocaleNameNotFoundError, LocaleName> =
-        findLocaleName.find(country, language)
-            .toEither { LocaleNameNotFoundError }
+        findLocaleName.find(country, language).toEither { LocaleNameNotFoundError }
 }

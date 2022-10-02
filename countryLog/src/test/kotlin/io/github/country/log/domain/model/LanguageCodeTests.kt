@@ -12,7 +12,7 @@ internal class LanguageCodeTests : BehaviorSpec({
     given("request that represents language code") {
         `when`("make language code with valid data") {
             then("language code creation should be successful") {
-                val request = LanguageCodeRequest("UA")
+                val request = "UA"
                 val languageAlreadyExists: LanguageAlreadyExists = LanguageAlreadyExistsFake()
 
                 val result = LanguageCode.make(request, languageAlreadyExists)
@@ -23,7 +23,7 @@ internal class LanguageCodeTests : BehaviorSpec({
 
         `when`("make language code with blank value") {
             then("language code creation should be failure") {
-                val request = LanguageCodeRequest("")
+                val request = ""
                 val languageAlreadyExists: LanguageAlreadyExists = LanguageAlreadyExistsFake()
 
                 val result = LanguageCode.make(request, languageAlreadyExists)
@@ -34,7 +34,7 @@ internal class LanguageCodeTests : BehaviorSpec({
 
         `when`("make language code with unknown value") {
             then("language code creation should be failure") {
-                val request = LanguageCodeRequest("RU")
+                val request = "RU"
                 val languageAlreadyExists: LanguageAlreadyExists = LanguageAlreadyExistsFake()
 
                 val result = LanguageCode.make(request, languageAlreadyExists)

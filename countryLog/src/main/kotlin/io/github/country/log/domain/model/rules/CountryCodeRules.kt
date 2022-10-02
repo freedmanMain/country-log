@@ -14,72 +14,71 @@ import arrow.core.validNel
 import arrow.core.zip
 import arrow.typeclasses.Semigroup
 import io.github.country.log.domain.model.CountryCode
-import io.github.country.log.domain.model.CountryCodeRequest
 import io.github.country.log.domain.model.errors.CountryCodeCreationErrors
 import io.github.country.log.domain.services.CountryAlreadyExists
 
 internal object CountryCodeRules {
 
-    private fun CountryCodeRequest.notBlankNel(): ValidatedNel<CountryCodeCreationErrors.BlankCountryCodeError, CountryCodeRequest> =
-        if (this.value.isBlank())
+    private fun String.notBlankNel(): ValidatedNel<CountryCodeCreationErrors.BlankCountryCodeError, String> =
+        if (this.isBlank())
             CountryCodeCreationErrors.BlankCountryCodeError.invalidNel()
         else
             validNel()
 
-    private fun CountryCodeRequest.notBlank(): Validated<CountryCodeCreationErrors.BlankCountryCodeError, CountryCodeRequest> =
-        if (this.value.isBlank())
+    private fun String.notBlank(): Validated<CountryCodeCreationErrors.BlankCountryCodeError, String> =
+        if (this.isBlank())
             CountryCodeCreationErrors.BlankCountryCodeError.invalid()
         else
             valid()
 
-    private fun CountryCodeRequest.notUnknownNel(countryAlreadyExists: CountryAlreadyExists)
-            : ValidatedNel<CountryCodeCreationErrors.CountryCodeNotExistsError, CountryCodeRequest> =
+    private fun String.notUnknownNel(countryAlreadyExists: CountryAlreadyExists)
+            : ValidatedNel<CountryCodeCreationErrors.CountryCodeNotExistsError, String> =
         if (!countryAlreadyExists.check(this))
             CountryCodeCreationErrors.CountryCodeNotExistsError.invalidNel()
         else
             validNel()
 
-    private fun CountryCodeRequest.notUnknown(countryAlreadyExists: CountryAlreadyExists)
-            : Validated<CountryCodeCreationErrors.CountryCodeNotExistsError, CountryCodeRequest> =
+    private fun String.notUnknown(countryAlreadyExists: CountryAlreadyExists)
+            : Validated<CountryCodeCreationErrors.CountryCodeNotExistsError, String> =
         if (!countryAlreadyExists.check(this))
             CountryCodeCreationErrors.CountryCodeNotExistsError.invalid()
         else
             valid()
 
-    private fun CountryCodeRequest.validateErrorAccumulate(countryAlreadyExists: CountryAlreadyExists)
+    private fun String.validateErrorAccumulate(countryAlreadyExists: CountryAlreadyExists)
             : ValidatedNel<CountryCodeCreationErrors, CountryCode> =
         notBlankNel().zip(
             Semigroup.nonEmptyList(),
             notUnknownNel(countryAlreadyExists)
-        ) { _, _ -> CountryCode(value) }
+        ) { _, _ -> CountryCode(this@validateErrorAccumulate) }
             .handleErrorWith { CountryCodeCreationErrors.NotAtCountryCodeError.invalidNel() }
 
-    private fun CountryCodeRequest.validateFailFastNel(countryAlreadyExists: CountryAlreadyExists)
+    private fun String.validateFailFastNel(countryAlreadyExists: CountryAlreadyExists)
             : Either<Nel<CountryCodeCreationErrors>, CountryCode> = either.eager {
         notBlankNel().bind()
         notUnknownNel(countryAlreadyExists).bind()
-        CountryCode(value)
+        CountryCode(this@validateFailFastNel)
     }
 
-    private fun CountryCodeRequest.validateFailFast(countryAlreadyExists: CountryAlreadyExists)
+    private fun String.validateFailFast(countryAlreadyExists: CountryAlreadyExists)
             : Either<CountryCodeCreationErrors, CountryCode> = either.eager {
         notBlank().bind()
         notUnknown(countryAlreadyExists).bind()
-        CountryCode(value)
+        CountryCode(this@validateFailFast)
     }
 
     internal operator fun invoke(
         countryAlreadyExists: CountryAlreadyExists,
-        request: CountryCodeRequest
-    ): Either<CountryCodeCreationErrors, CountryCode> = request.validateFailFast(countryAlreadyExists)
+        data: String
+    ): Either<CountryCodeCreationErrors, CountryCode> = data.validateFailFast(countryAlreadyExists)
 
     internal operator fun invoke(
         strategy: ValidationStrategy,
         countryAlreadyExists: CountryAlreadyExists,
-        requestList: List<CountryCodeRequest>
+        dataList: List<String>
     ): Either<Nel<CountryCodeCreationErrors>, List<CountryCode>> = when (strategy) {
-        is ValidationStrategy.FailFast -> requestList.traverse { it.validateFailFastNel(countryAlreadyExists) }
-        is ValidationStrategy.ErrorAccumulation -> requestList.traverse { it.validateErrorAccumulate(countryAlreadyExists) }
+        is ValidationStrategy.FailFast -> dataList.traverse { it.validateFailFastNel(countryAlreadyExists) }
+        is ValidationStrategy.ErrorAccumulation -> dataList.traverse { it.validateErrorAccumulate(countryAlreadyExists) }
             .toEither()
     }
 }

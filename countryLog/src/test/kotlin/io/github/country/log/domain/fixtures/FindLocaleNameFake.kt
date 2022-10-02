@@ -7,7 +7,7 @@ import io.github.country.log.domain.model.LanguageCode
 import io.github.country.log.domain.services.result.LocaleName
 import io.github.country.log.domain.services.FindLocaleName
 
-class FindLocaleNameFake : FindLocaleName {
+internal class FindLocaleNameFake : FindLocaleName {
     private val inMemDb = mutableMapOf<Pair<CountryCode, LanguageCode>, String>()
         .apply {
             this[CountryCode("UA") to LanguageCode("EN")] = "Ukraine"
