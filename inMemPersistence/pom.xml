@@ -9,7 +9,7 @@
 
     <packaging>jar</packaging>
 
-    <name>io.github.country.log.inmem.persistence inMemPersistence</name>
+    <name>persistence</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

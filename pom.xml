@@ -13,7 +13,7 @@
     </modules>
     <packaging>pom</packaging>
 
-    <name>io.github.country.log country-log</name>
+    <name>log</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
