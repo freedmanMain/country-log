@@ -1,4 +1,4 @@
-package io.github.country.log.client.endpoints
+package io.github.country.log.client.rest
 
 const val API_V1 = "rest/countryLog/v1"
 

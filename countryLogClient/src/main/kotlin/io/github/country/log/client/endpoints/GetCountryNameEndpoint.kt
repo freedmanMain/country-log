@@ -2,6 +2,7 @@ package io.github.country.log.client.endpoints
 
 import arrow.core.Either
 import io.github.country.log.client.endpoints.model.CountryNameResponse
+import io.github.country.log.client.rest.API_V1_COUNTRY_GET_NAME
 import io.github.country.log.client.rest.InvalidParams
 import io.github.country.log.client.rest.resourceNotFound
 import io.github.country.log.client.rest.toBadRequest
