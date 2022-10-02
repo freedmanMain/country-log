@@ -1,4 +1,12 @@
 /.idea/
 /target/
-/usecases/target/
 *.iml
+
+/countryLog/target/
+
+/countryLogClient/target/
+/countryLogClient/HELP.md
+/countryLogClient/mvnw*
+/countryLogClient/.mvn
+
+/inMemPersistence/target/
